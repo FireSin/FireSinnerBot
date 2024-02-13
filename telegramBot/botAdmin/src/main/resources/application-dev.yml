@@ -1,0 +1,11 @@
+
+spring:
+  devtools:
+    livereload:
+      port: 8095
+  config:
+    import: "classpath:bot-config.yml, classpath:db-config.yml"
+server:
+  port: 8085
+  ssl:
+    enabled: false

@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.firesin</groupId>
+        <artifactId>FireSinnerBot</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <modules>
+        <module>botUser</module>
+        <module>botAdmin</module>
+    </modules>
+
+    <artifactId>telegramBot</artifactId>
+    <packaging>pom</packaging>
+
+    <name>telegramBot</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>ru.firesin</groupId>
+            <artifactId>feature</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+        </dependency>
+
+    </dependencies>
+</project>

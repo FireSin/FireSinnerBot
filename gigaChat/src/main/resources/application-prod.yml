@@ -1,0 +1,13 @@
+server:
+  port: 8087
+
+spring:
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: ${RABBITMQ_DEFAULT_USER}
+    password: ${RABBITMQ_DEFAULT_PASS}
+
+Token:
+  url: https://ngw.devices.sberbank.ru:9443/api/v2/oauth
+  key: ${GIGACHAT_KEY}

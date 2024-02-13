@@ -1,0 +1,27 @@
+server:
+  port: 8085
+
+bot:
+  name: ${BOT_NAME_ADMIN}
+  token: ${BOT_TOKEN_ADMIN}
+
+spring:
+  datasource:
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    url: ${POSTGRES_URL}
+
+  jpa:
+    generate-ddl: true
+    open-in-view: false
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: ${RABBITMQ_DEFAULT_USER}
+    password: ${RABBITMQ_DEFAULT_PASS}
+    template:
+      retry:
+        enabled: true
+        max-attempts: 3
+        initial-interval: 1000ms

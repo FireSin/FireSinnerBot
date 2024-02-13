@@ -1,0 +1,101 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3.10-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER:
+      RABBITMQ_DEFAULT_PASS:
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: on-failure
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_DB:
+    ports:
+      - "5432:5432"
+    restart: on-failure
+    volumes:
+      - bot_data:/var/lib/postgresql/data
+
+  admin:
+    image: tgbot-admin
+    build:
+      context: ./telegramBot/botAdmin
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_URL:
+      BOT_NAME_ADMIN:
+      BOT_TOKEN_ADMIN:
+      RABBITMQ_DEFAULT_USER:
+      RABBITMQ_DEFAULT_PASS:
+    ports:
+      - "8085:8085"
+    depends_on:
+      - rabbitmq
+      - postgres
+
+  user:
+    image: tgbot-user
+    build:
+      context: ./telegramBot/botUser
+      dockerfile: Dockerfile
+    environment:
+      BOT_NAME_USER:
+      BOT_TOKEN_USER:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_URL:
+      RABBITMQ_DEFAULT_USER:
+      RABBITMQ_DEFAULT_PASS:
+    ports:
+      - "8086:8086"
+    depends_on:
+      - rabbitmq
+      - postgres
+
+  weather:
+    image: weather-app
+    build:
+      context: ./weather
+      dockerfile: Dockerfile
+    environment:
+      RABBITMQ_DEFAULT_USER:
+      RABBITMQ_DEFAULT_PASS:
+      OPENWEATHERMAP_KEY:
+    ports:
+      - "8084:8084"
+    depends_on:
+      - rabbitmq
+      - postgres
+      - admin
+      - user
+
+  chat:
+    image: giga-chat-app
+    build:
+      context: ./gigaChat
+      dockerfile: Dockerfile
+    environment:
+      RABBITMQ_DEFAULT_USER:
+      RABBITMQ_DEFAULT_PASS:
+      GIGACHAT_KEY:
+    ports:
+      - "8087:8087"
+    depends_on:
+      - rabbitmq
+      - postgres
+      - admin
+      - user
+
+volumes:
+  rabbitmq_data:
+  bot_data:

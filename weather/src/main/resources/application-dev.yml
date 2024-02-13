@@ -1,0 +1,9 @@
+server:
+  port: 8084
+
+spring:
+  devtools:
+    livereload:
+      port: 8094
+  config:
+    import: "classpath:rabbit-config.yml, classpath:weather-config.yml"
