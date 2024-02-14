@@ -1,9 +1,10 @@
 package ru.firesin.weather.model;
 
+import com.github.bfsmith.geotimezone.TimeZoneLookup;
 import lombok.Data;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -14,14 +15,25 @@ import java.util.List;
 @Data
 public class WeatherNow {
     private List<Weather> weather;
+    private Coordinates coord;
     private Main main;
     private Wind wind;
     private Sys sys;
     private String name;
 
     private String formatTime(long timestamp) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        return sdf.format(new Date(timestamp * 1000));
+        String timeZoneId = new TimeZoneLookup()
+                .getTimeZone(coord.getLat(), coord.getLon())
+                .getResult();
+
+        ZoneId cityTimeZone = ZoneId.of(timeZoneId);
+
+        ZonedDateTime citySunriseDateTime = Instant
+                .ofEpochSecond(timestamp)
+                .atZone(cityTimeZone);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm O");
+        return citySunriseDateTime.format(formatter);
     }
 
     @Override
