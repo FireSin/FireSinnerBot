@@ -1,4 +1,4 @@
-version: '3'
+version: '3.4'
 services:
   rabbitmq:
     image: rabbitmq:3.10-management-alpine
@@ -9,11 +9,17 @@ services:
       - "5672:5672"
       - "15672:15672"
     restart: on-failure
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
 
   postgres:
-    image: postgres:16-alpine
+    image: postgres:alpine
     environment:
       POSTGRES_USER:
       POSTGRES_PASSWORD:
@@ -21,11 +27,17 @@ services:
     ports:
       - "5432:5432"
     restart: on-failure
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     volumes:
       - bot_data:/var/lib/postgresql/data
 
   admin:
-    image: tgbot-admin
+    image: bot-admin
     build:
       context: ./telegramBot/botAdmin
       dockerfile: Dockerfile
@@ -35,16 +47,16 @@ services:
       POSTGRES_URL:
       BOT_NAME_ADMIN:
       BOT_TOKEN_ADMIN:
-      RABBITMQ_DEFAULT_USER:
-      RABBITMQ_DEFAULT_PASS:
     ports:
       - "8085:8085"
     depends_on:
-      - rabbitmq
-      - postgres
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
 
   user:
-    image: tgbot-user
+    image: bot-user
     build:
       context: ./telegramBot/botUser
       dockerfile: Dockerfile
@@ -54,47 +66,54 @@ services:
       POSTGRES_USER:
       POSTGRES_PASSWORD:
       POSTGRES_URL:
+      RABBITMQ_HOST:
       RABBITMQ_DEFAULT_USER:
       RABBITMQ_DEFAULT_PASS:
     ports:
       - "8086:8086"
     depends_on:
-      - rabbitmq
-      - postgres
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
 
   weather:
-    image: weather-app
+    image: weather
     build:
       context: ./weather
       dockerfile: Dockerfile
     environment:
+      RABBITMQ_HOST:
       RABBITMQ_DEFAULT_USER:
       RABBITMQ_DEFAULT_PASS:
       OPENWEATHERMAP_KEY:
+      OPENWEATHERMAP_URL:
     ports:
       - "8084:8084"
     depends_on:
-      - rabbitmq
-      - postgres
-      - admin
-      - user
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
 
   chat:
-    image: giga-chat-app
+    image: gigachat
     build:
       context: ./gigaChat
       dockerfile: Dockerfile
     environment:
+      RABBITMQ_HOST:
       RABBITMQ_DEFAULT_USER:
       RABBITMQ_DEFAULT_PASS:
+      GIGACHAT_URL:
       GIGACHAT_KEY:
     ports:
       - "8087:8087"
     depends_on:
-      - rabbitmq
-      - postgres
-      - admin
-      - user
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
 
 volumes:
   rabbitmq_data:

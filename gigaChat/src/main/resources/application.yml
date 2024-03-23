@@ -3,11 +3,11 @@ server:
 
 spring:
   rabbitmq:
-    host: rabbitmq
+    host: ${RABBITMQ_HOST}
     port: 5672
     username: ${RABBITMQ_DEFAULT_USER}
     password: ${RABBITMQ_DEFAULT_PASS}
 
 Token:
-  url: https://ngw.devices.sberbank.ru:9443/api/v2/oauth
+  url: ${GIGACHAT_URL}
   key: ${GIGACHAT_KEY}

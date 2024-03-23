@@ -1,9 +1,4 @@
-server:
-  port: 8087
-
 spring:
   devtools:
     livereload:
       port: 8097
-  config:
-    import: "classpath:gigaChat-config.yml, classpath:rabbit-config.yml"

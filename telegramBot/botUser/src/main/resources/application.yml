@@ -1,21 +1,15 @@
-server:
-  port: 8086
-
-bot:
-  name: ${BOT_NAME_USER}
-  token: ${BOT_TOKEN_USER}
-
 spring:
   datasource:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
     url: ${POSTGRES_URL}
+
   jpa:
     generate-ddl: true
     open-in-view: false
 
   rabbitmq:
-    host: rabbitmq
+    host: ${RABBITMQ_HOST}
     port: 5672
     username: ${RABBITMQ_DEFAULT_USER}
     password: ${RABBITMQ_DEFAULT_PASS}
@@ -24,3 +18,12 @@ spring:
         enabled: true
         max-attempts: 3
         initial-interval: 1000ms
+
+server:
+  port: 8086
+  ssl:
+    enabled: false
+
+bot:
+  name: ${BOT_NAME_USER}
+  token: ${BOT_TOKEN_USER}

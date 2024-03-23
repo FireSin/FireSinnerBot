@@ -3,11 +3,11 @@ server:
 
 spring:
   rabbitmq:
-    host: rabbitmq
+    host: ${RABBITMQ_HOST}
     port: 5672
     username: ${RABBITMQ_DEFAULT_USER}
     password: ${RABBITMQ_DEFAULT_PASS}
 
 OpenWeatherMap:
   key: ${OPENWEATHERMAP_KEY}
-  urlGetWeather: http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API key}&units=metric&lang=ru
+  urlGetWeather: ${OPENWEATHERMAP_URL}

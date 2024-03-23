@@ -22,7 +22,7 @@
         <dependency>
             <groupId>com.github.bfsmith</groupId>
             <artifactId>geotimezone</artifactId>
-            <version>1.0.3</version>
+            <version>${geotimezone.version}</version>
         </dependency>
 
     </dependencies>

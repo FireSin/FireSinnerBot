@@ -1,11 +1,4 @@
-
 spring:
   devtools:
     livereload:
       port: 8096
-  config:
-    import: "classpath:bot-config.yml, classpath:rabbit-config.yml, classpath:db-config.yml"
-server:
-  port: 8086
-  ssl:
-    enabled: false

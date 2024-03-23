@@ -1,8 +1,6 @@
-package ru.firesin.botuser.config;
+package ru.firesin.rabbitMq.config;
 
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,11 +13,6 @@ import static ru.firesin.rabbitMq.Queue.RabbitQueue.*;
 
 @Configuration
 public class AppConfig {
-
-    @Bean
-    public MessageConverter jsonMessageConverter(){
-        return new Jackson2JsonMessageConverter();
-    }
 
     @Bean
     public Queue weatherMessageQueue() {
